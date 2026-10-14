@@ -1,0 +1,72 @@
+====================================================================
+               สรุปโปรเจกต์เว็บขายของออนไลน์ (E-Commerce)
+                       พัฒนาด้วย Next.js (App Router)
+====================================================================
+
+[ 1. สรุปเทคโนโลยีที่เลือกใช้ (TECH STACK) ]
+--------------------------------------------------------------------
+- Frontend Framework : Next.js (App Router) + TypeScript
+- Styling / UI       : Tailwind CSS + shadcn/ui + Lucide Icons
+- Database & ORM     : PostgreSQL + Prisma ORM
+- Authentication     : NextAuth.js (Auth.js)
+- State Management   : Zustand (จัดการตะกร้าสินค้า Cart State)
+- Payment Gateway    : PromptPay QR Code / Omise / Stripe
+
+
+[ 2. ฟีเจอร์หลักที่จะพัฒนา ]
+--------------------------------------------------------------------
+1. หน้าแสดงรายการสินค้า ค้นหา และกรองตามหมวดหมู่ (Product List & Filter)
+2. หน้าแสดงรายละเอียดสินค้า (Product Detail Page)
+3. ระบบตะกร้าสินค้า (Shopping Cart with Zustand)
+4. ระบบล็อกอิน / สมัครสมาชิก (Authentication)
+5. ระบบชำระเงินและแจ้งโอน (Checkout & Payment)
+6. ระบบหลังบ้านสำหรับแอดมิน จัดการสินค้าและออเดอร์ (Admin Dashboard)
+
+
+[ 3. ชุดคำสั่งรันสร้างโปรเจกต์ (CLI COMMANDS) ]
+--------------------------------------------------------------------
+เปิด Terminal หรือ Command Prompt ในโฟลเดอร์ที่คุณต้องการ แล้วก๊อปปี้คำสั่งตามลำดับด้านล่างไปวางได้เลย:
+
+# Step 1: สร้างโปรเจกต์ Next.js
+npx create-next-app@latest my-eshop
+
+# Step 2: ย้ายเข้าไปในโฟลเดอร์โปรเจกต์
+cd my-eshop
+
+# Step 3: ติดตั้ง Prisma (ระบบจัดการ Database)
+npm install @prisma/client
+npm install prisma --save-dev
+npx prisma init
+
+# Step 4: ติดตั้ง Zustand (ระบบจัดการตะกร้าสินค้า)
+npm install zustand
+
+# Step 5: ติดตั้ง NextAuth (ระบบล็อกอิน/สมาชิก)
+npm install next-auth@beta
+
+# Step 6: ติดตั้ง Icon และ UI Components
+npm install lucide-react
+npx shadcn@latest init
+
+# Step 7: รันเปิดหน้าเว็บทดสอบบนเครื่อง (http://localhost:3000)
+npm run dev
+
+
+[ 4. ตัวอย่างไฟล์กำหนดค่าสิ่งแวดล้อม (.env) ]
+--------------------------------------------------------------------
+สร้างไฟล์ชื่อ .env ไว้ที่โฟลเดอร์หลักของโปรเจกต์ แล้วใส่ค่าด้านล่างนี้:
+
+# Database Configuration (Prisma)
+DATABASE_URL="postgresql://postgres:your_password@localhost:5432/my_eshop?schema=public"
+# หรือถ้าใช้ SQLite บนเครื่อง:
+# DATABASE_URL="file:./dev.db"
+
+# NextAuth Configuration
+NEXTAUTH_SECRET="your_super_secret_key_change_me_randomly"
+NEXTAUTH_URL="http://localhost:3000"
+
+# Payment Gateway (Stripe / Omise)
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_your_publishable_key_here"
+STRIPE_SECRET_KEY="sk_test_your_secret_key_here"
+
+====================================================================
