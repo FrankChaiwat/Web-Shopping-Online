@@ -76,8 +76,19 @@ export async function PUT(request: Request) {
     const price = Number(body.price);
     const stock = Number(body.stock ?? 0);
 
-    if (!Number.isInteger(id) || !name || !category || !Number.isFinite(price) || price < 0 || !Number.isInteger(stock) || stock < 0) {
-      return NextResponse.json({ error: "กรุณากรอกข้อมูลสินค้าให้ถูกต้อง" }, { status: 400 });
+    if (
+      !Number.isInteger(id) ||
+      !name ||
+      !category ||
+      !Number.isFinite(price) ||
+      price < 0 ||
+      !Number.isInteger(stock) ||
+      stock < 0
+    ) {
+      return NextResponse.json(
+        { error: "กรุณากรอกข้อมูลสินค้าให้ถูกต้อง" },
+        { status: 400 },
+      );
     }
 
     const product = await prisma.product.update({
@@ -93,7 +104,10 @@ export async function PUT(request: Request) {
     });
     return NextResponse.json(product);
   } catch {
-    return NextResponse.json({ error: "ไม่สามารถแก้ไขสินค้าได้" }, { status: 500 });
+    return NextResponse.json(
+      { error: "ไม่สามารถแก้ไขสินค้าได้" },
+      { status: 500 },
+    );
   }
 }
 

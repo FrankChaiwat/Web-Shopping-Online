@@ -21,10 +21,12 @@
 shop online/
 ├─ app/
 │  ├─ page.tsx                  # หน้าร้าน: ค้นหา กรอง และแสดงสินค้า
+│  ├─ layout.tsx                # Layout และ metadata ของเว็บไซต์
 │  ├─ globals.css               # สไตล์และ animation กลางของเว็บ
 │  ├─ account/page.tsx          # บัญชีลูกค้า ที่อยู่ และสินค้าแนะนำ
 │  ├─ cart/page.tsx             # ตะกร้าสินค้า
 │  ├─ login/page.tsx            # Login ลูกค้า / Admin
+│  ├─ register/page.tsx         # สมัครสมาชิก
 │  ├─ admin/
 │  │  ├─ page.tsx               # หลังบ้านเพิ่ม/ลบสินค้าและอัปโหลดรูป
 │  │  ├─ products/page.tsx       # หน้าจัดการและแก้ไขสินค้าล่าสุด
@@ -89,10 +91,10 @@ npm run dev
 
    ```env
    DATABASE_URL="postgresql://postgres:รหัสผ่าน@localhost:5432/my_eshop?schema=public"
-   ADMIN_USERNAME="chaiwat"
-   ADMIN_PASSWORD="chaiwat"
-   CUSTOMER_USERNAME="frank"
-   CUSTOMER_PASSWORD="frank"
+   ADMIN_USERNAME="admin"
+   ADMIN_PASSWORD="admin"
+   CUSTOMER_USERNAME="user"
+   CUSTOMER_PASSWORD="user"
    ```
 
 4. สร้าง Prisma Client และตารางฐานข้อมูล
@@ -152,10 +154,10 @@ npm run db:studio    # เปิดหน้าจัดการข้อมู
 ไฟล์ต่อไปนี้ถูกตั้งค่าไว้ใน `.gitignore` และจะไม่ถูกติดตามโดย Git:
 
 - `node_modules/` — dependencies ที่ติดตั้งด้วย npm
-- `.next/`, `out/`, `.vercel/` และ `.turbo/` — ไฟล์ build และ cache ที่สร้างอัตโนมัติ
-- `.env` และไฟล์ secret — ค่าการเชื่อมต่อฐานข้อมูล รหัสผ่าน และ secret key
-- `public/uploads/*` — รูปสินค้าที่อัปโหลดไว้สำหรับการใช้งานบนเครื่อง local
-- `*.tsbuildinfo`, log, coverage และไฟล์ชั่วคราว
+- `.next/`, `out/`, `.vercel/` และ `.turbo/` — ไฟล์ build และ cache
+- `.env` และไฟล์ secret — ข้อมูลฐานข้อมูล รหัสผ่าน และ secret key
+- `public/uploads/*` — รูปสินค้าที่อัปโหลดไว้ในเครื่อง
+- `*.tsbuildinfo`, logs, coverage และไฟล์ชั่วคราว
 - `*.pem` — certificate หรือ private key
 
-รูปใน `public/uploads` ยังอยู่ในเครื่องสำหรับการทดสอบ แต่จะไม่ถูกอัปขึ้น GitHub หากต้อง deploy จริง ควรใช้ object storage เช่น S3 หรือ Cloudinary
+รูปใน `public/uploads` ยังอยู่ในเครื่องสำหรับการทดสอบ แต่ไม่ถูกอัปขึ้น GitHub หากนำระบบขึ้น production ควรใช้ object storage เช่น S3 หรือ Cloudinary

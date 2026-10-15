@@ -179,7 +179,9 @@ export default function AdminPage() {
             </button>
           </div>
         </form>
-        <a href="/admin/products" className="admin-manage-link">จัดการสินค้าล่าสุด →</a>
+        <a href="/admin/products" className="admin-manage-link">
+          จัดการสินค้าล่าสุด →
+        </a>
       </div>
     </main>
   );

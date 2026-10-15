@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   description: "ร้านค้าออนไลน์คัดสรรของใช้ดีไซน์เรียบง่าย",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="th"><body>{children}</body></html>;
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="th">
+      <body>{children}</body>
+    </html>
+  );
 }
