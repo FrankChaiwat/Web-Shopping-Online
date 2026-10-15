@@ -4,6 +4,8 @@ node_modules/
 # Next.js build output
 .next/
 out/
+.vercel/
+.turbo/
 
 # Environment variables and secrets
 .env
@@ -13,6 +15,11 @@ out/
 # TypeScript build info
 *.tsbuildinfo
 next-env.d.ts
+
+# Local caches and generated reports
+.cache/
+coverage/
+*.lcov
 
 # Uploaded files created during local development
 public/uploads/*
@@ -25,8 +32,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Coverage and test output
-coverage/
+# Test output
 .nyc_output/
 
 # Editor and operating system files
@@ -40,3 +46,6 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Certificates and private keys
+*.pem

@@ -11,14 +11,29 @@ export default function Home() {
   const [category, setCategory] = useState("ทั้งหมด");
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [productsError, setProductsError] = useState("");
   const [customerLoggedIn, setCustomerLoggedIn] = useState(false);
   const [sessionChecked, setSessionChecked] = useState(false);
   const setCartOwner = useCartStore(state => state.setOwner);
-  useEffect(() => { fetch("/api/products").then(response => response.ok ? response.json() : []).then(setProducts); }, []);
+  useEffect(() => {
+    fetch("/api/products")
+      .then(response => {
+        if (!response.ok) throw new Error("โหลดสินค้าไม่สำเร็จ");
+        return response.json();
+      })
+      .then(setProducts)
+      .catch(() => setProductsError("ไม่สามารถโหลดสินค้าได้ กรุณาลองใหม่อีกครั้ง"))
+      .finally(() => setProductsLoading(false));
+  }, []);
   useEffect(() => { fetch("/api/customer/session").then(response => response.json()).then(data => { setCustomerLoggedIn(data.authenticated); setCartOwner(data.authenticated ? data.username : null); setSessionChecked(true); }); }, [setCartOwner]);
   const cartItems = useCartStore(state => state.items);
   const addItem = useCartStore(state => state.addItem);
-  const addToCart = (product: Product) => { if (!customerLoggedIn) { window.location.href = "/login"; return; } addItem({ id: product.id, name: product.name, price: Number(product.price), imageUrl: product.imageUrl }); };
+  const addToCart = (product: Product) => {
+    if (product.stock <= 0) return;
+    if (!customerLoggedIn) { window.location.href = "/login"; return; }
+    addItem({ id: product.id, name: product.name, price: Number(product.price), imageUrl: product.imageUrl });
+  };
   const filtered = useMemo(() => products.filter(p => (category === "ทั้งหมด" || p.category === category) && p.name.toLowerCase().includes(query.toLowerCase())), [products, category, query]);
   const money = (n:number|string) => `฿${Number(n).toLocaleString("th-TH")}`;
   return <>
@@ -29,8 +44,11 @@ export default function Home() {
       <section id="shop"><div className="sectionhead"><div><div className="eyebrow">OUR SELECTION</div><h2>สินค้าคัดสรร</h2></div><span>{filtered.length} รายการ</span></div>
         <div className="categories">{categories.map(c => <button key={c} className={`chip ${category===c ? "active":""}`} onClick={() => setCategory(c)}>{c}</button>)}</div>
         <div className="search"><Search size={17} color="#7b8981"/><input id="search" placeholder="ค้นหาสินค้า..." value={query} onChange={e => setQuery(e.target.value)}/></div>
-        {filtered.length === 0 ? <div className="empty-store"><PackageOpen size={28}/><strong>ยังไม่มีสินค้า</strong><span>แอดมินยังไม่ได้เพิ่มสินค้าเข้าร้าน</span></div> : <div className="products" style={{marginTop:24}}>{filtered.map(p => { const visual = visualByCategory[p.category] ?? { icon:"📦", tone:"tone-5" }; return <article className="product" key={p.id}><a href={`/product/${p.id}`} className="product-link"><div className={`product-img ${visual.tone}`}>{p.imageUrl ? <img src={p.imageUrl} alt={p.name}/> : <span>{visual.icon}</span>}</div><h3>{p.name}</h3></a><div className="product-meta"><span>{money(p.price)}</span><button className="add" aria-label={`เพิ่ม ${p.name} ลงตะกร้า`} onClick={() => addToCart(p)}><Plus size={17}/></button></div></article>; })}</div>}
+        {productsLoading && <div className="empty-store"><strong>กำลังโหลดสินค้า...</strong></div>}
+        {productsError && !productsLoading && <div className="empty-store"><strong>{productsError}</strong></div>}
+        {!productsLoading && !productsError && (filtered.length === 0 ? <div className="empty-store"><PackageOpen size={28}/><strong>ยังไม่มีสินค้า</strong><span>แอดมินยังไม่ได้เพิ่มสินค้าเข้าร้าน</span></div> : <div className="products" style={{marginTop:24}}>{filtered.map(p => { const visual = visualByCategory[p.category] ?? { icon:"📦", tone:"tone-5" }; return <article className="product" key={p.id}><a href={`/product/${p.id}`} className="product-link"><div className={`product-img ${visual.tone}`}>{p.imageUrl ? <img src={p.imageUrl} alt={p.name}/> : <span>{visual.icon}</span>}</div><h3>{p.name}</h3></a><div className="product-meta"><span>{money(p.price)}</span><button className="add" disabled={p.stock <= 0} aria-label={`เพิ่ม ${p.name} ลงตะกร้า`} onClick={() => addToCart(p)}><Plus size={17}/></button></div></article>; })}</div>)}
       </section>
+      <section id="about" className="about-section"><div className="eyebrow">ABOUT US</div><h2>ของดีไซน์เรียบง่ายสำหรับทุกวัน</h2><p>เราคัดสรรสินค้าที่ใช้งานได้จริง ดีไซน์เรียบง่าย และอยู่กับคุณได้นาน</p></section>
     </main>
     <footer className="footer" id="contact"><div className="shell footer-inner"><div><div className="brand">NORDIC<span style={{color:"#d4e774"}}>.</span></div><p>ของดีไซน์เรียบง่ายที่อยู่กับคุณได้นาน</p></div><div className="footer-right"><p>© 2026 Nordic Market · กรุงเทพฯ</p><a href="/admin/login">สำหรับผู้ดูแลระบบ</a></div></div></footer>
   </>;

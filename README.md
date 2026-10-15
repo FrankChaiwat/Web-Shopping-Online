@@ -147,3 +147,15 @@ npm run db:studio    # เปิดหน้าจัดการข้อมู
 ```
 
 > หมายเหตุ: `public/uploads` เหมาะกับการทดสอบบนเครื่อง หากนำขึ้น production ควรใช้ object storage เช่น S3 หรือ Cloudinary และควรเปลี่ยนรหัสผ่านตัวอย่างใน `.env`
+## ไฟล์ที่ไม่อัปโหลดขึ้น GitHub
+
+ไฟล์ต่อไปนี้ถูกตั้งค่าไว้ใน `.gitignore` และจะไม่ถูกติดตามโดย Git:
+
+- `node_modules/` — dependencies ที่ติดตั้งด้วย npm
+- `.next/`, `out/`, `.vercel/` และ `.turbo/` — ไฟล์ build และ cache ที่สร้างอัตโนมัติ
+- `.env` และไฟล์ secret — ค่าการเชื่อมต่อฐานข้อมูล รหัสผ่าน และ secret key
+- `public/uploads/*` — รูปสินค้าที่อัปโหลดไว้สำหรับการใช้งานบนเครื่อง local
+- `*.tsbuildinfo`, log, coverage และไฟล์ชั่วคราว
+- `*.pem` — certificate หรือ private key
+
+รูปใน `public/uploads` ยังอยู่ในเครื่องสำหรับการทดสอบ แต่จะไม่ถูกอัปขึ้น GitHub หากต้อง deploy จริง ควรใช้ object storage เช่น S3 หรือ Cloudinary
